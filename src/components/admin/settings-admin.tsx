@@ -10,6 +10,23 @@ import { Save } from "lucide-react";
 
 type Setting = { id: number; key: string; value: string };
 
+const settingLabels: Record<string, string> = {
+  phone_primary: "Основной телефон",
+  phone_secondary: "Дополнительный телефон",
+  email: "Email",
+  address_ru: "Адрес (русский)",
+  address_en: "Адрес (английский)",
+  whatsapp: "WhatsApp",
+  telegram: "Telegram",
+  viber: "Viber",
+  wechat: "WeChat",
+  instagram: "Instagram",
+  facebook: "Facebook",
+  tiktok: "TikTok",
+  working_hours: "Часы работы",
+  currency_rate: "Курс валюты (KGS/USD)",
+};
+
 export function SettingsAdmin({ settings }: { settings: Setting[] }) {
   const [values, setValues] = useState<Record<string, string>>(
     Object.fromEntries(settings.map((s) => [s.key, s.value]))
@@ -28,14 +45,14 @@ export function SettingsAdmin({ settings }: { settings: Setting[] }) {
   }
 
   const groups: Record<string, string[]> = {
-    Contact: [
+    "Контактная информация": [
       "phone_primary",
       "phone_secondary",
       "email",
       "address_ru",
       "address_en",
     ],
-    "Social Media": [
+    "Социальные сети и мессенджеры": [
       "whatsapp",
       "telegram",
       "viber",
@@ -44,20 +61,20 @@ export function SettingsAdmin({ settings }: { settings: Setting[] }) {
       "facebook",
       "tiktok",
     ],
-    Other: ["working_hours", "currency_rate"],
+    "Прочие настройки": ["working_hours", "currency_rate"],
   };
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Settings</h1>
+        <h1 className="text-2xl font-bold">Настройки</h1>
         <Button
           onClick={handleSave}
           disabled={saving}
           className="bg-taxi-blue hover:bg-taxi-blue-dark"
         >
           <Save className="mr-2 h-4 w-4" />
-          {saving ? "Saving..." : saved ? "Saved!" : "Save All"}
+          {saving ? "Сохранение..." : saved ? "Сохранено!" : "Сохранить всё"}
         </Button>
       </div>
 
@@ -71,7 +88,7 @@ export function SettingsAdmin({ settings }: { settings: Setting[] }) {
               {keys.map((key) => (
                 <div key={key} className="grid gap-2 sm:grid-cols-3 sm:items-center">
                   <Label className="text-sm font-medium text-muted-foreground">
-                    {key.replace(/_/g, " ")}
+                    {settingLabels[key] || key}
                   </Label>
                   <Input
                     className="sm:col-span-2"

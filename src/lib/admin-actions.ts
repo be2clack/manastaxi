@@ -25,6 +25,26 @@ export async function updateBookingStatus(
   revalidatePath("/admin/bookings");
 }
 
+export async function updateBooking(
+  id: number,
+  data: Partial<{
+    name: string;
+    phone: string;
+    email: string | null;
+    flightNumber: string | null;
+    customDestination: string | null;
+    pickupDate: string;
+    pickupTime: string | null;
+    passengers: number;
+    luggage: number;
+    notes: string | null;
+    status: "new" | "confirmed" | "in_progress" | "completed" | "cancelled";
+  }>
+) {
+  await db.update(bookings).set(data).where(eq(bookings.id, id));
+  revalidatePath("/admin/bookings");
+}
+
 export async function deleteBooking(id: number) {
   await db.delete(bookings).where(eq(bookings.id, id));
   revalidatePath("/admin/bookings");
@@ -79,12 +99,14 @@ export async function updateRoute(
   id: number,
   data: Partial<{
     toLocation: string;
+    fromLocation: string;
     distanceKm: number;
     durationMin: number;
     priceSom: number;
     priceUsd: number;
     isPopular: boolean;
     isActive: boolean;
+    sortOrder: number;
   }>
 ) {
   await db.update(routes).set(data).where(eq(routes.id, id));
@@ -103,14 +125,28 @@ export async function getAdminTours() {
   return db.select().from(tours).orderBy(asc(tours.sortOrder));
 }
 
+export async function createTour(data: {
+  slug: string;
+  durationDays: number;
+  priceUsd: number;
+  priceSom: number;
+  maxGroup: number;
+}) {
+  await db.insert(tours).values(data);
+  revalidatePath("/admin/tours");
+  revalidatePath("/tours");
+}
+
 export async function updateTour(
   id: number,
   data: Partial<{
+    slug: string;
     durationDays: number;
     priceUsd: number;
     priceSom: number;
     maxGroup: number;
     isActive: boolean;
+    sortOrder: number;
   }>
 ) {
   await db.update(tours).set(data).where(eq(tours.id, id));
@@ -134,10 +170,18 @@ export async function updateService(
   data: Partial<{
     priceUsd: string;
     priceSom: string;
+    iconName: string;
     isActive: boolean;
+    sortOrder: number;
   }>
 ) {
   await db.update(services).set(data).where(eq(services.id, id));
+  revalidatePath("/admin/services");
+  revalidatePath("/services");
+}
+
+export async function deleteService(id: number) {
+  await db.delete(services).where(eq(services.id, id));
   revalidatePath("/admin/services");
   revalidatePath("/services");
 }

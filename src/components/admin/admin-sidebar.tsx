@@ -16,13 +16,13 @@ import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
 const menuItems = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
-  { href: "/admin/routes", label: "Routes", icon: Route },
-  { href: "/admin/tours", label: "Tours", icon: Mountain },
-  { href: "/admin/services", label: "Services", icon: Wrench },
-  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin", label: "Панель управления", icon: LayoutDashboard },
+  { href: "/admin/bookings", label: "Бронирования", icon: CalendarCheck },
+  { href: "/admin/routes", label: "Маршруты", icon: Route },
+  { href: "/admin/tours", label: "Туры", icon: Mountain },
+  { href: "/admin/services", label: "Услуги", icon: Wrench },
+  { href: "/admin/messages", label: "Сообщения", icon: MessageSquare },
+  { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];
 
 export function AdminSidebar({ locale }: { locale: string }) {
@@ -32,7 +32,7 @@ export function AdminSidebar({ locale }: { locale: string }) {
     <aside className="hidden w-64 shrink-0 border-r bg-gray-50 lg:block">
       <div className="flex h-full flex-col p-4">
         <div className="mb-6 px-3">
-          <h2 className="text-lg font-bold text-taxi-blue">Admin Panel</h2>
+          <h2 className="text-lg font-bold text-taxi-blue">Админ-панель</h2>
           <p className="text-xs text-muted-foreground">Manas Taxi</p>
         </div>
 
@@ -67,7 +67,7 @@ export function AdminSidebar({ locale }: { locale: string }) {
           onClick={() => signOut({ callbackUrl: `/${locale}` })}
         >
           <LogOut className="h-4 w-4" />
-          Sign Out
+          Выйти
         </Button>
       </div>
     </aside>

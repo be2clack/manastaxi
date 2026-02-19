@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password");
+      setError("Неверный email или пароль");
       setLoading(false);
     } else {
       router.push(`/${locale}/admin`);
@@ -43,8 +43,8 @@ export default function AdminLoginPage() {
           <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-taxi-blue">
             <Plane className="h-7 w-7 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold">Admin Panel</CardTitle>
-          <p className="text-sm text-muted-foreground">Manas Taxi Dashboard</p>
+          <CardTitle className="text-2xl font-bold">Админ-панель</CardTitle>
+          <p className="text-sm text-muted-foreground">Manas Taxi — Панель управления</p>
         </CardHeader>
         <CardContent>
           {error && (
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Пароль</Label>
               <Input
                 id="password"
                 name="password"
@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
               className="w-full bg-taxi-blue hover:bg-taxi-blue-dark py-5"
             >
               <LogIn className="mr-2 h-4 w-4" />
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Вход..." : "Войти"}
             </Button>
           </form>
         </CardContent>

@@ -21,13 +21,13 @@ export default async function AdminMessagesPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-bold">Messages ({messages.length})</h1>
+      <h1 className="mb-6 text-2xl font-bold">Сообщения ({messages.length})</h1>
 
       <div className="space-y-4">
         {messages.length === 0 ? (
           <Card>
             <CardContent className="py-8 text-center text-muted-foreground">
-              No messages yet
+              Сообщений пока нет
             </CardContent>
           </Card>
         ) : (
@@ -43,7 +43,7 @@ export default async function AdminMessagesPage({
                       <span className="font-semibold">{msg.name}</span>
                       {!msg.isRead && (
                         <Badge className="bg-taxi-blue text-white text-xs">
-                          New
+                          Новое
                         </Badge>
                       )}
                     </div>
@@ -53,7 +53,7 @@ export default async function AdminMessagesPage({
                     </div>
                     <p className="mt-2 text-sm">{msg.message}</p>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      {new Date(msg.createdAt).toLocaleString()}
+                      {new Date(msg.createdAt).toLocaleString("ru")}
                     </p>
                   </div>
                   <div className="flex gap-1">
@@ -69,6 +69,7 @@ export default async function AdminMessagesPage({
                           variant="ghost"
                           className="h-8 w-8 text-green-500"
                           type="submit"
+                          title="Отметить прочитанным"
                         >
                           <CheckCircle2 className="h-4 w-4" />
                         </Button>
@@ -85,6 +86,7 @@ export default async function AdminMessagesPage({
                         variant="ghost"
                         className="h-8 w-8 text-red-500"
                         type="submit"
+                        title="Удалить"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
