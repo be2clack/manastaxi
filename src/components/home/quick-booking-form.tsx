@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Send, MessageCircle } from "lucide-react";
+import { Send } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 
 type BookingState = { success: boolean; error?: string } | null;
 
@@ -168,7 +169,7 @@ export function QuickBookingForm({
                       );
                     }}
                   >
-                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <FaWhatsapp className="mr-2 h-4 w-4" />
                     {t("submitWhatsapp")}
                   </Button>
                 </div>

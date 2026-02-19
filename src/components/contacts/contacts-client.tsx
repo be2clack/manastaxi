@@ -8,14 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  MessageCircle,
-  Send,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { FaWhatsapp, FaTelegram, FaViber, FaWeixin } from "react-icons/fa6";
 
 type State = { success: boolean; error?: string } | null;
 
@@ -24,10 +18,10 @@ async function contactAction(_prev: State, formData: FormData): Promise<State> {
 }
 
 const messengers = [
-  { name: "WhatsApp", href: "https://wa.me/996XXXXXXXXX", color: "hover:bg-green-600 bg-green-500" },
-  { name: "Telegram", href: "https://t.me/manastaxi", color: "hover:bg-blue-600 bg-blue-500" },
-  { name: "Viber", href: "viber://chat?number=+996XXXXXXXXX", color: "hover:bg-purple-700 bg-purple-600" },
-  { name: "WeChat", href: "#", color: "hover:bg-green-700 bg-green-600" },
+  { name: "WhatsApp", href: "https://wa.me/996XXXXXXXXX", color: "bg-[#25D366] hover:bg-[#1da851]", icon: FaWhatsapp },
+  { name: "Telegram", href: "https://t.me/manastaxi", color: "bg-[#26A5E4] hover:bg-[#1e8cbf]", icon: FaTelegram },
+  { name: "Viber", href: "viber://chat?number=+996XXXXXXXXX", color: "bg-[#7360F2] hover:bg-[#5a48d4]", icon: FaViber },
+  { name: "WeChat", href: "#", color: "bg-[#07C160] hover:bg-[#06a350]", icon: FaWeixin },
 ];
 
 export function ContactsClient() {
@@ -126,7 +120,7 @@ export function ContactsClient() {
                     rel="noopener noreferrer"
                     className={`inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors ${m.color}`}
                   >
-                    <MessageCircle className="h-4 w-4" />
+                    <m.icon className="h-5 w-5" />
                     {m.name}
                   </a>
                 ))}
