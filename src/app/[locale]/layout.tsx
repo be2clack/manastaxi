@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
-import { locales, type Locale } from "@/i18n/config";
+import { locales, rtlLocales, type Locale } from "@/i18n/config";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
@@ -29,6 +29,7 @@ const seoTitles: Record<Locale, string> = {
   ky: "Manas Taxi — Манас аэропортунун расмий такси кызматы | Бишкек",
   zh: "Manas Taxi — 玛纳斯机场官方出租车服务 | 比什凯克，吉尔吉斯斯坦",
   hi: "Manas Taxi — मानस हवाई अड्डा आधिकारिक टैक्सी सेवा | बिश्केक",
+  ar: "Manas Taxi — خدمة تاكسي مطار ماناس الرسمية | بيشكيك، قيرغيزستان",
 };
 
 const seoDescriptions: Record<Locale, string> = {
@@ -37,6 +38,7 @@ const seoDescriptions: Record<Locale, string> = {
   ky: "Манас аэропортунун расмий такси кызматы. Бишкектен Кыргызстандын каалаган жерине трансфер. Белгиленген баалар, тосуп алуу кызматы. Күнү-түнү.",
   zh: "玛纳斯机场官方出租车服务。从比什凯克机场到吉尔吉斯斯坦任何地方的接送服务。固定价格、接机服务、航班跟踪。全天候服务。",
   hi: "मानस हवाई अड्डे की आधिकारिक टैक्सी सेवा। बिश्केक हवाई अड्डे से किर्गिस्तान में कहीं भी ट्रांसफर। निश्चित मूल्य, मिलने की सेवा। 24/7।",
+  ar: "خدمة تاكسي رسمية في مطار ماناس. توصيل من مطار بيشكيك إلى أي مكان في قيرغيزستان. أسعار ثابتة، استقبال، تتبع الرحلات. متاح على مدار الساعة.",
 };
 
 export async function generateMetadata({
@@ -71,7 +73,14 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
-      locale: locale === "zh" ? "zh_CN" : locale === "hi" ? "hi_IN" : locale,
+      locale:
+        locale === "zh"
+          ? "zh_CN"
+          : locale === "hi"
+            ? "hi_IN"
+            : locale === "ar"
+              ? "ar_SA"
+              : locale,
       url: `${BASE_URL}/${locale}`,
       siteName: "Manas Taxi",
       title: seoTitles[loc] || seoTitles.en,
@@ -108,7 +117,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={rtlLocales.includes(locale as Locale) ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         <StructuredData />
       </head>
