@@ -32,7 +32,7 @@ export function BookingPageClient({
   const [state, formAction, isPending] = useActionState(bookingAction, null);
 
   const whatsappNumber = (
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "996XXXXXXXXX"
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "996550693000"
   ).replace(/[^0-9]/g, "");
 
   return (

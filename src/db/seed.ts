@@ -149,14 +149,14 @@ async function seed() {
 
   // ============ SETTINGS ============
   await db.insert(settings).values([
-    { key: "phone_primary", value: "+996 XXX XXX XXX" },
-    { key: "phone_secondary", value: "+996 XXX XXX XXX" },
+    { key: "phone_primary", value: "+996 550 693 000" },
+    { key: "phone_secondary", value: "+996 550 693 000" },
     { key: "email", value: "info@manastaxi.kg" },
     { key: "address_ru", value: "Аэропорт Манас, Бишкек, Кыргызстан" },
     { key: "address_en", value: "Manas Airport, Bishkek, Kyrgyzstan" },
-    { key: "whatsapp", value: "+996XXXXXXXXX" },
-    { key: "telegram", value: "https://t.me/manastaxi" },
-    { key: "viber", value: "+996XXXXXXXXX" },
+    { key: "whatsapp", value: "+996550693000" },
+    { key: "telegram", value: "+996550693000" },
+    { key: "viber", value: "+996550693000" },
     { key: "wechat", value: "manastaxi" },
     { key: "instagram", value: "https://instagram.com/manastaxi" },
     { key: "facebook", value: "https://facebook.com/manastaxi" },

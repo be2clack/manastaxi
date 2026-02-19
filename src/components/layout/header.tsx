@@ -64,7 +64,7 @@ export function Header() {
             size="sm"
             className="hidden bg-taxi-blue hover:bg-taxi-blue-dark sm:flex"
           >
-            <a href="tel:+996XXXXXXXXX">
+            <a href="tel:+996550693000">
               <Phone className="mr-1 h-4 w-4" />
               {t("callNow")}
             </a>
@@ -113,7 +113,7 @@ export function Header() {
                   asChild
                   className="mt-4 bg-taxi-blue hover:bg-taxi-blue-dark"
                 >
-                  <a href="tel:+996XXXXXXXXX">
+                  <a href="tel:+996550693000">
                     <Phone className="mr-2 h-4 w-4" />
                     {t("callNow")}
                   </a>

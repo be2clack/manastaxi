@@ -6,7 +6,7 @@ export function getLocalBusinessSchema() {
     description:
       "Official taxi service at Manas Airport, Bishkek. Airport transfers across Kyrgyzstan.",
     url: "https://manastaxi.kg",
-    telephone: "+996XXXXXXXXX",
+    telephone: "+996550693000",
     email: "info@manastaxi.kg",
     address: {
       "@type": "PostalAddress",
@@ -41,7 +41,7 @@ export function getLocalBusinessSchema() {
     sameAs: [
       "https://instagram.com/manastaxi",
       "https://facebook.com/manastaxi",
-      "https://t.me/manastaxi",
+      "https://t.me/+996550693000",
     ],
   };
 }

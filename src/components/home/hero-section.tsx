@@ -58,7 +58,7 @@ export function HeroSection() {
               className="border-white/30 bg-white/10 text-white hover:bg-white/20 text-base px-8 py-6"
             >
               <a
-                href={`https://wa.me/${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "996XXXXXXXXX").replace(/[^0-9]/g, "")}`}
+                href={`https://wa.me/${(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "996550693000").replace(/[^0-9]/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

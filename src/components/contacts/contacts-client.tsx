@@ -18,9 +18,9 @@ async function contactAction(_prev: State, formData: FormData): Promise<State> {
 }
 
 const messengers = [
-  { name: "WhatsApp", href: "https://wa.me/996XXXXXXXXX", color: "bg-[#25D366] hover:bg-[#1da851]", icon: FaWhatsapp },
-  { name: "Telegram", href: "https://t.me/manastaxi", color: "bg-[#26A5E4] hover:bg-[#1e8cbf]", icon: FaTelegram },
-  { name: "Viber", href: "viber://chat?number=+996XXXXXXXXX", color: "bg-[#7360F2] hover:bg-[#5a48d4]", icon: FaViber },
+  { name: "WhatsApp", href: "https://wa.me/996550693000", color: "bg-[#25D366] hover:bg-[#1da851]", icon: FaWhatsapp },
+  { name: "Telegram", href: "https://t.me/+996550693000", color: "bg-[#26A5E4] hover:bg-[#1e8cbf]", icon: FaTelegram },
+  { name: "Viber", href: "viber://chat?number=+996550693000", color: "bg-[#7360F2] hover:bg-[#5a48d4]", icon: FaViber },
   { name: "WeChat", href: "#", color: "bg-[#07C160] hover:bg-[#06a350]", icon: FaWeixin },
 ];
 
@@ -65,10 +65,10 @@ export function ContactsClient() {
                   <div>
                     <h3 className="text-sm font-semibold">{t("phone")}</h3>
                     <a
-                      href="tel:+996XXXXXXXXX"
+                      href="tel:+996550693000"
                       className="text-sm text-taxi-blue hover:underline"
                     >
-                      +996 XXX XXX XXX
+                      +996 550 693 000
                     </a>
                   </div>
                 </CardContent>

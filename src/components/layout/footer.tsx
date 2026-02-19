@@ -103,10 +103,10 @@ export function Footer() {
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0 text-taxi-yellow" />
                 <a
-                  href="tel:+996XXXXXXXXX"
+                  href="tel:+996550693000"
                   className="text-sm hover:text-taxi-yellow"
                 >
-                  +996 XXX XXX XXX
+                  +996 550 693 000
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export function Footer() {
               </h4>
               <div className="flex gap-3">
                 <a
-                  href="https://wa.me/996XXXXXXXXX"
+                  href="https://wa.me/996550693000"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-800 transition-colors hover:bg-[#25D366]"
@@ -136,7 +136,7 @@ export function Footer() {
                   <FaWhatsapp className="h-4 w-4" />
                 </a>
                 <a
-                  href="https://t.me/manastaxi"
+                  href="https://t.me/+996550693000"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-800 transition-colors hover:bg-[#26A5E4]"
