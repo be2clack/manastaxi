@@ -1,0 +1,233 @@
+{
+  "nav": {
+    "home": "首页",
+    "routes": "路线",
+    "booking": "预约",
+    "flights": "航班",
+    "tours": "旅游",
+    "services": "服务",
+    "contacts": "联系我们",
+    "admin": "管理",
+    "callNow": "立即致电"
+  },
+  "hero": {
+    "title": "玛纳斯机场官方出租车服务",
+    "subtitle": "从比什凯克到吉尔吉斯斯坦各地的可靠机场接送服务",
+    "cta": "预约出租车",
+    "ctaWhatsapp": "通过 WhatsApp 预约",
+    "features": {
+      "fixedPrices": "固定价格",
+      "meetGreet": "接机服务",
+      "flightTracking": "航班跟踪",
+      "available247": "全天候服务"
+    }
+  },
+  "booking": {
+    "title": "预约出租车",
+    "subtitle": "填写表单，我们将在5分钟内与您联系",
+    "name": "您的姓名",
+    "namePlaceholder": "张三",
+    "phone": "电话",
+    "phonePlaceholder": "+996 XXX XXX XXX",
+    "email": "电子邮箱",
+    "emailPlaceholder": "email@example.com",
+    "flightNumber": "航班号",
+    "flightPlaceholder": "例如 KC 105",
+    "destination": "目的地",
+    "destinationPlaceholder": "选择目的地",
+    "customDestination": "自定义地址",
+    "customDestPlaceholder": "请输入目的地地址",
+    "date": "到达日期",
+    "time": "时间",
+    "passengers": "乘客人数",
+    "luggage": "行李件数",
+    "notes": "备注",
+    "notesPlaceholder": "特殊要求、儿童座椅等",
+    "submit": "在线预约",
+    "submitWhatsapp": "通过 WhatsApp 预约",
+    "success": "预约已提交！我们将尽快与您联系。",
+    "error": "提交失败，请重试。"
+  },
+  "routes": {
+    "title": "路线与价格",
+    "subtitle": "玛纳斯机场接送固定价格",
+    "searchPlaceholder": "搜索目的地...",
+    "from": "出发地",
+    "to": "目的地",
+    "distance": "距离",
+    "duration": "行程时间",
+    "price": "价格",
+    "km": "公里",
+    "min": "分钟",
+    "hour": "小时",
+    "bookNow": "立即预约",
+    "popular": "热门路线",
+    "all": "全部路线",
+    "noResults": "未找到相关路线"
+  },
+  "flights": {
+    "title": "航班跟踪",
+    "subtitle": "实时查询玛纳斯机场航班动态",
+    "searchPlaceholder": "航班号（例如 KC 105）",
+    "search": "查询航班",
+    "arrivals": "到达航班",
+    "departures": "出发航班",
+    "flight": "航班",
+    "airline": "航空公司",
+    "origin": "出发地",
+    "destination": "目的地",
+    "scheduled": "计划时间",
+    "estimated": "预计时间",
+    "status": "状态",
+    "landed": "已降落",
+    "enRoute": "飞行中",
+    "delayed": "延误",
+    "cancelled": "已取消",
+    "scheduled_status": "计划中",
+    "bookTaxi": "为此航班预约出租车"
+  },
+  "tours": {
+    "title": "吉尔吉斯斯坦旅游",
+    "subtitle": "跟随我们的旅游团探索吉尔吉斯斯坦的壮丽风光",
+    "days": "天",
+    "day": "天",
+    "from": "起价",
+    "perPerson": "每人",
+    "maxGroup": "最大团队人数",
+    "people": "人",
+    "bookTour": "预订旅游",
+    "details": "详情",
+    "issykKul": {
+      "title": "伊塞克湖之旅",
+      "description": "前往中亚明珠——伊塞克湖的难忘之旅。游览乔尔蓬-阿塔、卡拉科尔和南岸。享受湖滨休闲与壮美山景。"
+    },
+    "sonKul": {
+      "title": "颂湖之旅",
+      "description": "前往海拔3016米的高山湖泊——颂湖。入住毡房、骑马体验、感受游牧文化。"
+    },
+    "alaArcha": {
+      "title": "阿拉阿查——山地一日游",
+      "description": "阿拉阿查国家公园一日游。山间步道、瀑布、冰川和壮丽的天山风光。"
+    },
+    "silkRoad": {
+      "title": "丝绸之路探秘之旅",
+      "description": "沿古丝绸之路穿越吉尔吉斯斯坦的7天旅程。塔什拉巴特、纳伦、颂湖、山口和古驿站。"
+    },
+    "osh": {
+      "title": "奥什与吉尔吉斯斯坦南部",
+      "description": "前往古城奥什——吉尔吉斯斯坦的第二首都。苏莱曼圣山、集市、乌兹根以及阿斯兰博布的核桃林。"
+    },
+    "horseTrek": {
+      "title": "山地骑马之旅",
+      "description": "穿越吉尔吉斯山地牧场的5天骑马旅行。高山营地、毡房住宿、高山湖泊和与牧民的邂逅。"
+    }
+  },
+  "services": {
+    "title": "我们的服务",
+    "subtitle": "为您提供舒适旅程的全方位服务",
+    "airportTransfer": {
+      "title": "机场接送",
+      "description": "从玛纳斯机场到吉尔吉斯斯坦各地的舒适接送服务。到达区迎接，协助搬运行李。"
+    },
+    "meetGreet": {
+      "title": "接机服务",
+      "description": "我们的司机将在到达区举牌迎接您。协助搬运行李并护送至车辆。"
+    },
+    "vipTransfer": {
+      "title": "VIP 接送",
+      "description": "商务级车辆的高端接送服务。真皮内饰、空调、Wi-Fi、饮用水和小食。"
+    },
+    "hotelBooking": {
+      "title": "酒店预订",
+      "description": "我们帮您以优惠价格预订比什凯克及吉尔吉斯斯坦各地的精选酒店和民宿。"
+    },
+    "cityTour": {
+      "title": "城市观光",
+      "description": "由经验丰富的司机带您游览比什凯克。阿拉套广场、集市、博物馆及其他地标景点。"
+    },
+    "businessTransfer": {
+      "title": "商务接送",
+      "description": "为商务出行提供接送服务。准时、保密、舒适的商务级车辆。"
+    },
+    "bookService": "预订服务",
+    "free": "免费"
+  },
+  "contacts": {
+    "title": "联系我们",
+    "subtitle": "随时与我们取得联系",
+    "address": "地址",
+    "addressValue": "吉尔吉斯斯坦，比什凯克，玛纳斯机场",
+    "phone": "电话",
+    "email": "电子邮箱",
+    "workingHours": "工作时间",
+    "workingHoursValue": "全天候，24小时服务",
+    "messengers": "即时通讯",
+    "socialMedia": "社交媒体",
+    "writeUs": "给我们留言",
+    "nameLabel": "您的姓名",
+    "emailLabel": "您的邮箱",
+    "phoneLabel": "电话",
+    "messageLabel": "留言",
+    "messagePlaceholder": "您的问题或留言...",
+    "send": "发送消息",
+    "sendSuccess": "消息已发送！我们将尽快回复。",
+    "sendError": "发送失败，请重试。"
+  },
+  "whyUs": {
+    "title": "为什么选择我们",
+    "subtitle": "从第一分钟起，让您的旅程倍感舒适",
+    "fixedPrices": {
+      "title": "固定价格",
+      "description": "绝无隐形消费——价格提前确定。无计价器，无额外收费。"
+    },
+    "professional": {
+      "title": "专业司机",
+      "description": "经验丰富、熟悉所有路线的专业司机。礼貌守时，拥有5年以上驾驶经验。"
+    },
+    "flightTracking": {
+      "title": "航班跟踪",
+      "description": "我们实时监控您的航班，根据延误自动调整。司机始终准时等候。"
+    },
+    "available247": {
+      "title": "全天候服务",
+      "description": "我们随时待命。无论是凌晨的航班还是深夜的到达，我们始终在您身边。"
+    },
+    "comfortable": {
+      "title": "舒适车辆",
+      "description": "干净整洁、配有空调的车辆。轿车和商务车可满足不同乘客需求。"
+    },
+    "languages": {
+      "title": "多语言服务",
+      "description": "提供俄语、吉尔吉斯语、英语等多种语言服务。为每一位旅客提供便利。"
+    }
+  },
+  "footer": {
+    "description": "玛纳斯机场官方出租车服务。吉尔吉斯斯坦全境可靠接送。",
+    "quickLinks": "快速链接",
+    "ourServices": "我们的服务",
+    "contactInfo": "联系方式",
+    "followUs": "关注我们",
+    "copyright": "© {year} 玛纳斯出租车。保留所有权利。",
+    "privacy": "隐私政策",
+    "terms": "服务条款"
+  },
+  "common": {
+    "som": "索姆",
+    "usd": "美元",
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "back": "返回",
+    "next": "下一步",
+    "close": "关闭",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "search": "搜索",
+    "noData": "暂无数据",
+    "from": "起价",
+    "currency": "索姆"
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "nav": {
+    "home": "Home",
+    "routes": "Routes",
+    "booking": "Booking",
+    "flights": "Flights",
+    "tours": "Tours",
+    "services": "Services",
+    "contacts": "Contacts",
+    "admin": "Admin",
+    "callNow": "Call Now"
+  },
+  "hero": {
+    "title": "Official Manas Airport Taxi Service",
+    "subtitle": "Reliable airport transfers from Bishkek to anywhere in Kyrgyzstan",
+    "cta": "Book a Taxi",
+    "ctaWhatsapp": "Book via WhatsApp",
+    "features": {
+      "fixedPrices": "Fixed Prices",
+      "meetGreet": "Meet & Greet",
+      "flightTracking": "Flight Tracking",
+      "available247": "Available 24/7"
+    }
+  },
+  "booking": {
+    "title": "Book a Taxi",
+    "subtitle": "Fill out the form and we'll contact you within 5 minutes",
+    "name": "Your Name",
+    "namePlaceholder": "John Smith",
+    "phone": "Phone",
+    "phonePlaceholder": "+996 XXX XXX XXX",
+    "email": "Email",
+    "emailPlaceholder": "email@example.com",
+    "flightNumber": "Flight Number",
+    "flightPlaceholder": "e.g. KC 105",
+    "destination": "Destination",
+    "destinationPlaceholder": "Select destination",
+    "customDestination": "Custom Address",
+    "customDestPlaceholder": "Enter destination address",
+    "date": "Arrival Date",
+    "time": "Time",
+    "passengers": "Passengers",
+    "luggage": "Luggage (pieces)",
+    "notes": "Notes",
+    "notesPlaceholder": "Special requests, child seat, etc.",
+    "submit": "Book Online",
+    "submitWhatsapp": "Book via WhatsApp",
+    "success": "Booking submitted! We'll contact you shortly.",
+    "error": "Submission error. Please try again."
+  },
+  "routes": {
+    "title": "Routes & Prices",
+    "subtitle": "Fixed prices for transfers from Manas Airport",
+    "searchPlaceholder": "Search destination...",
+    "from": "From",
+    "to": "To",
+    "distance": "Distance",
+    "duration": "Travel Time",
+    "price": "Price",
+    "km": "km",
+    "min": "min",
+    "hour": "h",
+    "bookNow": "Book Now",
+    "popular": "Popular",
+    "all": "All Routes",
+    "noResults": "No routes found"
+  },
+  "flights": {
+    "title": "Flight Tracking",
+    "subtitle": "Check Manas Airport flight status in real-time",
+    "searchPlaceholder": "Flight number (e.g. KC 105)",
+    "search": "Find Flight",
+    "arrivals": "Arrivals",
+    "departures": "Departures",
+    "flight": "Flight",
+    "airline": "Airline",
+    "origin": "Origin",
+    "destination": "Destination",
+    "scheduled": "Scheduled",
+    "estimated": "Estimated",
+    "status": "Status",
+    "landed": "Landed",
+    "enRoute": "En Route",
+    "delayed": "Delayed",
+    "cancelled": "Cancelled",
+    "scheduled_status": "Scheduled",
+    "bookTaxi": "Book taxi for this flight"
+  },
+  "tours": {
+    "title": "Tours in Kyrgyzstan",
+    "subtitle": "Discover the beauty of Kyrgyzstan with our tours",
+    "days": "days",
+    "day": "day",
+    "from": "from",
+    "perPerson": "per person",
+    "maxGroup": "Max group",
+    "people": "people",
+    "bookTour": "Book Tour",
+    "details": "Details",
+    "issykKul": {
+      "title": "Issyk-Kul Lake Tour",
+      "description": "Unforgettable journey to Issyk-Kul Lake — the pearl of Central Asia. Visit Cholpon-Ata, Karakol and the southern shore. Beach relaxation and mountain scenery."
+    },
+    "sonKul": {
+      "title": "Son-Kul Lake Tour",
+      "description": "Journey to the alpine lake Son-Kul at 3,016m altitude. Stay in a yurt, horse riding, experience nomadic culture."
+    },
+    "alaArcha": {
+      "title": "Ala-Archa — A Day in the Mountains",
+      "description": "Day trip to Ala-Archa National Park. Mountain trails, waterfalls, glaciers and stunning Tien Shan views."
+    },
+    "silkRoad": {
+      "title": "Great Silk Road Journey",
+      "description": "7-day journey along the ancient Silk Road through Kyrgyzstan. Tash-Rabat, Naryn, Son-Kul, mountain passes and caravanserais."
+    },
+    "osh": {
+      "title": "Osh & Southern Kyrgyzstan",
+      "description": "Journey to the ancient city of Osh — the second capital of Kyrgyzstan. Sulaiman-Too, bazaar, Uzgen and walnut forests of Arslanbob."
+    },
+    "horseTrek": {
+      "title": "Mountain Horse Trek",
+      "description": "5-day horse trek through Kyrgyz mountain pastures. Jailoo camps, yurt stays, alpine lakes and shepherd encounters."
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Full range of services for a comfortable journey",
+    "airportTransfer": {
+      "title": "Airport Transfer",
+      "description": "Comfortable transfer from Manas Airport to anywhere in Kyrgyzstan. Meet at arrival zone, luggage assistance."
+    },
+    "meetGreet": {
+      "title": "Meet & Greet",
+      "description": "Our driver will meet you at the arrival zone with a name sign. Help with luggage and escort to the vehicle."
+    },
+    "vipTransfer": {
+      "title": "VIP Transfer",
+      "description": "Premium transfer in a business-class vehicle. Leather interior, AC, Wi-Fi, water and snacks."
+    },
+    "hotelBooking": {
+      "title": "Hotel Booking",
+      "description": "We'll help book the best hotels and guesthouses in Bishkek and across Kyrgyzstan at special prices."
+    },
+    "cityTour": {
+      "title": "City Tour",
+      "description": "Sightseeing tour of Bishkek with an experienced driver. Ala-Too Square, bazaars, museums and other landmarks."
+    },
+    "businessTransfer": {
+      "title": "Business Transfer",
+      "description": "Transfer for business trips. Punctuality, confidentiality, comfortable business-class vehicle."
+    },
+    "bookService": "Book Service",
+    "free": "Free"
+  },
+  "contacts": {
+    "title": "Contacts",
+    "subtitle": "Get in touch with us",
+    "address": "Address",
+    "addressValue": "Manas Airport, Bishkek, Kyrgyzstan",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours",
+    "workingHoursValue": "24/7, around the clock",
+    "messengers": "Messengers",
+    "socialMedia": "Social Media",
+    "writeUs": "Write to Us",
+    "nameLabel": "Your Name",
+    "emailLabel": "Your Email",
+    "phoneLabel": "Phone",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Your question or message...",
+    "send": "Send Message",
+    "sendSuccess": "Message sent! We'll reply shortly.",
+    "sendError": "Sending error. Please try again."
+  },
+  "whyUs": {
+    "title": "Why Choose Us",
+    "subtitle": "We make your journey comfortable from the very first minute",
+    "fixedPrices": {
+      "title": "Fixed Prices",
+      "description": "No surprises — you know the price upfront. No meters or surcharges."
+    },
+    "professional": {
+      "title": "Professional Drivers",
+      "description": "Experienced drivers who know all routes. Polite, punctual, with 5+ years of experience."
+    },
+    "flightTracking": {
+      "title": "Flight Tracking",
+      "description": "We monitor your flight and adjust for delays. Your driver is always on time."
+    },
+    "available247": {
+      "title": "Available 24/7",
+      "description": "We're always on call. Early morning flight or late night arrival — we're always there."
+    },
+    "comfortable": {
+      "title": "Comfortable Vehicles",
+      "description": "Clean, air-conditioned vehicles. Sedans and minivans for any number of passengers."
+    },
+    "languages": {
+      "title": "Multilingual Support",
+      "description": "Service in Russian, Kyrgyz, English and other languages. For every guest."
+    }
+  },
+  "footer": {
+    "description": "Official Manas Airport taxi service. Reliable transfers across Kyrgyzstan.",
+    "quickLinks": "Quick Links",
+    "ourServices": "Our Services",
+    "contactInfo": "Contact Info",
+    "followUs": "Follow Us",
+    "copyright": "© {year} Manas Taxi. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "common": {
+    "som": "KGS",
+    "usd": "USD",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "noData": "No data",
+    "from": "from",
+    "currency": "KGS"
+  }
+}
