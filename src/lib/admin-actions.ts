@@ -3,14 +3,55 @@
 import { db } from "@/db";
 import {
   bookings,
+  drivers,
   routes,
   tours,
   services,
   settings,
   contactMessages,
+  vehicleClasses,
+  aiSettings,
 } from "@/db/schema";
 import { eq, desc, asc, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
+// ============ VEHICLE CLASSES ============
+export async function getVehicleClasses() {
+  return db.select().from(vehicleClasses).orderBy(asc(vehicleClasses.sortOrder));
+}
+
+export async function createVehicleClass(data: {
+  name: Record<string, string>;
+  slug: string;
+  description?: Record<string, string>;
+  maxPassengers: number;
+  maxLuggage: number;
+  sortOrder?: number;
+}) {
+  await db.insert(vehicleClasses).values(data);
+  revalidatePath("/admin/vehicle-classes");
+}
+
+export async function updateVehicleClass(
+  id: number,
+  data: Partial<{
+    name: Record<string, string>;
+    slug: string;
+    description: Record<string, string>;
+    maxPassengers: number;
+    maxLuggage: number;
+    sortOrder: number;
+    isActive: boolean;
+  }>
+) {
+  await db.update(vehicleClasses).set(data).where(eq(vehicleClasses.id, id));
+  revalidatePath("/admin/vehicle-classes");
+}
+
+export async function deleteVehicleClass(id: number) {
+  await db.delete(vehicleClasses).where(eq(vehicleClasses.id, id));
+  revalidatePath("/admin/vehicle-classes");
+}
 
 // ============ BOOKINGS ============
 export async function getBookings() {
@@ -225,4 +266,64 @@ export async function markMessageRead(id: number) {
 export async function deleteMessage(id: number) {
   await db.delete(contactMessages).where(eq(contactMessages.id, id));
   revalidatePath("/admin/messages");
+}
+
+// ============ AI SETTINGS ============
+export async function getAiSettings() {
+  return db.select().from(aiSettings);
+}
+
+export async function updateAiSetting(
+  id: number,
+  data: Partial<{
+    provider: "openai" | "anthropic";
+    model: string;
+    apiKey: string;
+    systemPrompt: string;
+    temperature: string;
+    isActive: boolean;
+  }>
+) {
+  if (data.isActive) {
+    // Deactivate all others first
+    await db.update(aiSettings).set({ isActive: false });
+  }
+  await db.update(aiSettings).set(data).where(eq(aiSettings.id, id));
+  revalidatePath("/admin/ai-settings");
+}
+
+// ============ DRIVERS ============
+export async function getDrivers() {
+  return db.select().from(drivers).orderBy(asc(drivers.name));
+}
+
+export async function createDriver(data: {
+  name: string;
+  phone: string;
+  vehicleClassId: number;
+  vehicleMake: string;
+  vehiclePlate: string;
+}) {
+  await db.insert(drivers).values(data);
+  revalidatePath("/admin/drivers");
+}
+
+export async function updateDriver(
+  id: number,
+  data: Partial<{
+    name: string;
+    phone: string;
+    vehicleClassId: number;
+    vehicleMake: string;
+    vehiclePlate: string;
+    isActive: boolean;
+  }>
+) {
+  await db.update(drivers).set(data).where(eq(drivers.id, id));
+  revalidatePath("/admin/drivers");
+}
+
+export async function deleteDriver(id: number) {
+  await db.delete(drivers).where(eq(drivers.id, id));
+  revalidatePath("/admin/drivers");
 }
