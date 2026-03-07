@@ -11,6 +11,7 @@ import {
   Settings,
   MessageSquare,
   LogOut,
+  Car,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ const menuItems = [
   { href: "/admin/bookings", label: "Бронирования", icon: CalendarCheck },
   { href: "/admin/routes", label: "Маршруты", icon: Route },
   { href: "/admin/tours", label: "Туры", icon: Mountain },
+  { href: "/admin/vehicle-classes", label: "Классы машин", icon: Car },
   { href: "/admin/services", label: "Услуги", icon: Wrench },
   { href: "/admin/messages", label: "Сообщения", icon: MessageSquare },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
