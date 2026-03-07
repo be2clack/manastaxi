@@ -8,6 +8,8 @@ import {
   services,
   settings,
   seoMeta,
+  vehicleClasses,
+  aiSettings,
 } from "./schema";
 
 async function seed() {
@@ -220,6 +222,116 @@ async function seed() {
 
   await db.insert(seoMeta).values(seoData);
   console.log("SEO meta seeded");
+
+  // ============ VEHICLE CLASSES ============
+  const defaultVehicleClasses = [
+    {
+      name: { ru: "Эконом", en: "Economy", ky: "Эконом", zh: "经济型", hi: "इकोनॉमी", ar: "اقتصادي" },
+      slug: "economy",
+      description: { ru: "Бюджетный вариант", en: "Budget option", ky: "Бюджеттик вариант", zh: "经济实惠", hi: "बजट विकल्प", ar: "خيار اقتصادي" },
+      maxPassengers: 4, maxLuggage: 3, sortOrder: 1,
+    },
+    {
+      name: { ru: "Комфорт", en: "Comfort", ky: "Комфорт", zh: "舒适型", hi: "कम्फर्ट", ar: "مريح" },
+      slug: "comfort",
+      description: { ru: "Комфортная поездка", en: "Comfortable ride", ky: "Ыңгайлуу жол", zh: "舒适出行", hi: "आरामदायक सवारी", ar: "رحلة مريحة" },
+      maxPassengers: 4, maxLuggage: 3, sortOrder: 2,
+    },
+    {
+      name: { ru: "Бизнес", en: "Business", ky: "Бизнес", zh: "商务型", hi: "बिज़नेस", ar: "أعمال" },
+      slug: "business",
+      description: { ru: "Бизнес-класс", en: "Business class", ky: "Бизнес-класс", zh: "商务舱", hi: "बिज़नेस क्लास", ar: "درجة رجال الأعمال" },
+      maxPassengers: 4, maxLuggage: 4, sortOrder: 3,
+    },
+    {
+      name: { ru: "VIP", en: "VIP", ky: "VIP", zh: "VIP贵宾", hi: "VIP", ar: "VIP" },
+      slug: "vip",
+      description: { ru: "Премиум обслуживание", en: "Premium service", ky: "Премиум тейлоо", zh: "高端服务", hi: "प्रीमियम सेवा", ar: "خدمة متميزة" },
+      maxPassengers: 4, maxLuggage: 4, sortOrder: 4,
+    },
+    {
+      name: { ru: "Минивэн", en: "Minivan", ky: "Минивэн", zh: "商务车", hi: "मिनीवैन", ar: "ميني فان" },
+      slug: "minivan",
+      description: { ru: "Для больших групп", en: "For larger groups", ky: "Чоң топтор үчүн", zh: "适合大型团组", hi: "बड़े समूहों के लिए", ar: "للمجموعات الكبيرة" },
+      maxPassengers: 7, maxLuggage: 6, sortOrder: 5,
+    },
+    {
+      name: { ru: "Микроавтобус", en: "Minibus", ky: "Микроавтобус", zh: "小巴", hi: "मिनीबस", ar: "حافلة صغيرة" },
+      slug: "minibus",
+      description: { ru: "Для групповых трансферов", en: "For group transfers", ky: "Топтук трансферлер үчүн", zh: "团体接送", hi: "समूह स्थानांतरण के लिए", ar: "للتنقلات الجماعية" },
+      maxPassengers: 15, maxLuggage: 15, sortOrder: 6,
+    },
+  ];
+
+  console.log("Seeding vehicle classes...");
+  await db.insert(vehicleClasses).values(defaultVehicleClasses);
+
+  // ============ AI SETTINGS ============
+  const defaultAiSettings = [
+    {
+      provider: "openai" as const,
+      model: "gpt-4o",
+      apiKey: "sk-your-openai-key-here",
+      systemPrompt: `Ты вежливый и эффективный менеджер сервиса Manas Taxi — трансфер из/в аэропорт Манас, Бишкек, Кыргызстан.
+
+Твоя задача — помочь клиенту заказать такси. Общайся на языке клиента — определяй язык по первому сообщению.
+
+ПРАВИЛА:
+- Короткие сообщения — 1-3 предложения максимум
+- Задавай ОДИН вопрос за раз
+- Не отправляй стены текста
+- Будь естественным, как живой менеджер
+
+СОБЕРИ ИНФОРМАЦИЮ:
+1. Маршрут: откуда и куда (аэропорт → город или город → аэропорт)
+2. Дата и время подачи машины
+3. Номер рейса (если трансфер из/в аэропорт)
+4. Класс машины (Эконом, Комфорт, Бизнес, VIP, Минивэн, Микроавтобус)
+5. Нужна ли табличка для встречи? (для прилетающих)
+6. Имя клиента
+7. Контактный номер телефона
+8. Количество пассажиров и багажа
+
+Для прилетающих — после оформления заказа предложи туры из нашего каталога.
+
+Когда вся информация собрана — подтверди детали и оформи заказ.`,
+      temperature: "0.70",
+      isActive: true,
+    },
+    {
+      provider: "anthropic" as const,
+      model: "claude-sonnet-4-20250514",
+      apiKey: "sk-ant-your-anthropic-key-here",
+      systemPrompt: `Ты вежливый и эффективный менеджер сервиса Manas Taxi — трансфер из/в аэропорт Манас, Бишкек, Кыргызстан.
+
+Твоя задача — помочь клиенту заказать такси. Общайся на языке клиента — определяй язык по первому сообщению.
+
+ПРАВИЛА:
+- Короткие сообщения — 1-3 предложения максимум
+- Задавай ОДИН вопрос за раз
+- Не отправляй стены текста
+- Будь естественным, как живой менеджер
+
+СОБЕРИ ИНФОРМАЦИЮ:
+1. Маршрут: откуда и куда (аэропорт → город или город → аэропорт)
+2. Дата и время подачи машины
+3. Номер рейса (если трансфер из/в аэропорт)
+4. Класс машины (Эконом, Комфорт, Бизнес, VIP, Минивэн, Микроавтобус)
+5. Нужна ли табличка для встречи? (для прилетающих)
+6. Имя клиента
+7. Контактный номер телефона
+8. Количество пассажиров и багажа
+
+Для прилетающих — после оформления заказа предложи туры из нашего каталога.
+
+Когда вся информация собрана — подтверди детали и оформи заказ.`,
+      temperature: "0.70",
+      isActive: false,
+    },
+  ];
+
+  console.log("Seeding AI settings...");
+  await db.insert(aiSettings).values(defaultAiSettings);
 
   console.log("Database seeding complete!");
 }
