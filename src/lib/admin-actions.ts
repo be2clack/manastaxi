@@ -18,7 +18,7 @@ import {
   feedback,
   orderEvents,
 } from "@/db/schema";
-import { eq, desc, asc, sql, and } from "drizzle-orm";
+import { eq, desc, asc, sql, and, avg, isNotNull, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 // ============ VEHICLE CLASSES ============
@@ -66,7 +66,7 @@ export async function getBookings() {
 
 export async function updateBookingStatus(
   id: number,
-  status: "new" | "confirmed" | "in_progress" | "completed" | "cancelled"
+  status: "new" | "confirmed" | "driver_search" | "assigned" | "in_progress" | "completed" | "cancelled"
 ) {
   await db.update(bookings).set({ status }).where(eq(bookings.id, id));
   revalidatePath("/admin/bookings");
@@ -85,7 +85,7 @@ export async function updateBooking(
     passengers: number;
     luggage: number;
     notes: string | null;
-    status: "new" | "confirmed" | "in_progress" | "completed" | "cancelled";
+    status: "new" | "confirmed" | "driver_search" | "assigned" | "in_progress" | "completed" | "cancelled";
   }>
 ) {
   await db.update(bookings).set(data).where(eq(bookings.id, id));
@@ -97,28 +97,82 @@ export async function deleteBooking(id: number) {
   revalidatePath("/admin/bookings");
 }
 
+export async function createBookingAdmin(data: {
+  name: string;
+  phone: string;
+  email?: string;
+  flightNumber?: string;
+  customDestination?: string;
+  pickupDate: string;
+  pickupTime?: string;
+  passengers: number;
+  luggage: number;
+  notes?: string;
+  status?: "new" | "confirmed" | "driver_search" | "assigned" | "in_progress" | "completed" | "cancelled";
+  vehicleClassId?: number;
+  driverId?: number;
+  needsSign?: boolean;
+  signText?: string;
+  totalPriceSom?: string;
+  totalPriceUsd?: string;
+  channel?: "website" | "whatsapp" | "telegram" | "manual";
+  language?: string;
+  clientCountry?: string;
+  isUrgent?: boolean;
+}) {
+  await db.insert(bookings).values({
+    name: data.name,
+    phone: data.phone,
+    email: data.email || null,
+    flightNumber: data.flightNumber || null,
+    customDestination: data.customDestination || null,
+    pickupDate: data.pickupDate,
+    pickupTime: data.pickupTime || null,
+    passengers: data.passengers,
+    luggage: data.luggage,
+    notes: data.notes || null,
+    status: data.status || "new",
+    source: "admin",
+    vehicleClassId: data.vehicleClassId || null,
+    driverId: data.driverId || null,
+    needsSign: data.needsSign || false,
+    signText: data.signText || null,
+    totalPriceSom: data.totalPriceSom || null,
+    totalPriceUsd: data.totalPriceUsd || null,
+    channel: data.channel || "manual",
+    language: data.language || null,
+    clientCountry: data.clientCountry || null,
+    isUrgent: data.isUrgent || false,
+  });
+  revalidatePath("/admin/bookings");
+}
+
 export async function getBookingStats() {
-  const total = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(bookings);
-  const newBookings = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(bookings)
-    .where(eq(bookings.status, "new"));
-  const confirmed = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(bookings)
-    .where(eq(bookings.status, "confirmed"));
-  const completed = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(bookings)
-    .where(eq(bookings.status, "completed"));
+  const [total, newBookings, confirmed, completed, activeOrders, onlineDrivers, totalDrivers, avgRatingResult] =
+    await Promise.all([
+      db.select({ count: sql<number>`count(*)` }).from(bookings),
+      db.select({ count: sql<number>`count(*)` }).from(bookings).where(eq(bookings.status, "new")),
+      db.select({ count: sql<number>`count(*)` }).from(bookings).where(eq(bookings.status, "confirmed")),
+      db.select({ count: sql<number>`count(*)` }).from(bookings).where(eq(bookings.status, "completed")),
+      db.select({ count: sql<number>`count(*)` }).from(bookings).where(
+        inArray(bookings.status, ["driver_search", "assigned", "in_progress"])
+      ),
+      db.select({ count: sql<number>`count(*)` }).from(drivers).where(
+        and(eq(drivers.isActive, true), isNotNull(drivers.telegramChatId))
+      ),
+      db.select({ count: sql<number>`count(*)` }).from(drivers),
+      db.select({ value: avg(drivers.rating) }).from(drivers),
+    ]);
 
   return {
     total: Number(total[0]?.count || 0),
     new: Number(newBookings[0]?.count || 0),
     confirmed: Number(confirmed[0]?.count || 0),
     completed: Number(completed[0]?.count || 0),
+    activeOrders: Number(activeOrders[0]?.count || 0),
+    onlineDrivers: Number(onlineDrivers[0]?.count || 0),
+    totalDrivers: Number(totalDrivers[0]?.count || 0),
+    avgRating: avgRatingResult[0]?.value ? Number(Number(avgRatingResult[0].value).toFixed(1)) : 0,
   };
 }
 

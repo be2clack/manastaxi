@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { updateBooking, deleteBooking } from "@/lib/admin-actions";
+import { updateBooking, deleteBooking, createBookingAdmin } from "@/lib/admin-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Trash2, Pencil, X, Save, Phone, Eye } from "lucide-react";
+import { Trash2, Pencil, X, Save, Phone, Eye, Plus } from "lucide-react";
 
 type Booking = {
   id: number;
@@ -20,17 +20,30 @@ type Booking = {
   pickupTime: string | null;
   passengers: number;
   luggage: number;
-  status: "new" | "confirmed" | "in_progress" | "completed" | "cancelled";
+  status: "new" | "confirmed" | "driver_search" | "assigned" | "in_progress" | "completed" | "cancelled";
   notes: string | null;
   source: string | null;
   createdAt: Date;
+  vehicleClassId: number | null;
+  driverId: number | null;
+  needsSign: boolean | null;
+  signText: string | null;
+  scheduledAt: Date | null;
+  totalPriceSom: string | null;
+  totalPriceUsd: string | null;
+  channel: "website" | "whatsapp" | "telegram" | "manual" | null;
+  language: string | null;
+  clientCountry: string | null;
+  isUrgent: boolean | null;
 };
 
-const statuses = ["new", "confirmed", "in_progress", "completed", "cancelled"] as const;
+const statuses = ["new", "confirmed", "driver_search", "assigned", "in_progress", "completed", "cancelled"] as const;
 
 const statusLabels: Record<string, string> = {
   new: "Новый",
   confirmed: "Подтверждён",
+  driver_search: "Поиск водителя",
+  assigned: "Назначен",
   in_progress: "В работе",
   completed: "Завершён",
   cancelled: "Отменён",
@@ -39,15 +52,50 @@ const statusLabels: Record<string, string> = {
 const statusColors: Record<string, string> = {
   new: "bg-blue-100 text-blue-700",
   confirmed: "bg-green-100 text-green-700",
+  driver_search: "bg-orange-100 text-orange-700",
+  assigned: "bg-purple-100 text-purple-700",
   in_progress: "bg-yellow-100 text-yellow-700",
   completed: "bg-gray-100 text-gray-700",
   cancelled: "bg-red-100 text-red-700",
+};
+
+const channelLabels: Record<string, { label: string; color: string }> = {
+  website: { label: "Сайт", color: "bg-gray-100 text-gray-700" },
+  whatsapp: { label: "WhatsApp", color: "bg-green-100 text-green-700" },
+  telegram: { label: "Telegram", color: "bg-blue-100 text-blue-700" },
+  manual: { label: "Вручную", color: "bg-purple-100 text-purple-700" },
+};
+
+const emptyCreateForm = {
+  name: "",
+  phone: "",
+  email: "",
+  flightNumber: "",
+  customDestination: "",
+  pickupDate: "",
+  pickupTime: "",
+  passengers: "1",
+  luggage: "1",
+  notes: "",
+  status: "new",
+  vehicleClassId: "",
+  driverId: "",
+  needsSign: false,
+  signText: "",
+  totalPriceSom: "",
+  totalPriceUsd: "",
+  channel: "manual",
+  language: "",
+  clientCountry: "",
+  isUrgent: false,
 };
 
 export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
   const [filter, setFilter] = useState<string>("all");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [detailId, setDetailId] = useState<number | null>(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [createForm, setCreateForm] = useState(emptyCreateForm);
   const [editForm, setEditForm] = useState({
     name: "",
     phone: "",
@@ -97,12 +145,47 @@ export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
     window.location.reload();
   }
 
+  async function handleCreate() {
+    setSaving(true);
+    await createBookingAdmin({
+      name: createForm.name,
+      phone: createForm.phone,
+      email: createForm.email || undefined,
+      flightNumber: createForm.flightNumber || undefined,
+      customDestination: createForm.customDestination || undefined,
+      pickupDate: createForm.pickupDate,
+      pickupTime: createForm.pickupTime || undefined,
+      passengers: Number(createForm.passengers),
+      luggage: Number(createForm.luggage),
+      notes: createForm.notes || undefined,
+      status: createForm.status as Booking["status"],
+      vehicleClassId: createForm.vehicleClassId ? Number(createForm.vehicleClassId) : undefined,
+      driverId: createForm.driverId ? Number(createForm.driverId) : undefined,
+      needsSign: createForm.needsSign,
+      signText: createForm.signText || undefined,
+      totalPriceSom: createForm.totalPriceSom || undefined,
+      totalPriceUsd: createForm.totalPriceUsd || undefined,
+      channel: createForm.channel as "website" | "whatsapp" | "telegram" | "manual",
+      language: createForm.language || undefined,
+      clientCountry: createForm.clientCountry || undefined,
+      isUrgent: createForm.isUrgent,
+    });
+    setShowCreateForm(false);
+    setCreateForm(emptyCreateForm);
+    setSaving(false);
+    window.location.reload();
+  }
+
   const detail = detailId ? bookings.find((b) => b.id === detailId) : null;
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">Бронирования ({bookings.length})</h1>
+        <Button onClick={() => { setShowCreateForm(!showCreateForm); setEditingId(null); setDetailId(null); }} className="bg-green-600 hover:bg-green-700">
+          <Plus className="mr-2 h-4 w-4" />
+          Создать заказ вручную
+        </Button>
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
@@ -125,6 +208,121 @@ export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
         ))}
       </div>
 
+      {showCreateForm && (
+        <Card className="mb-4 border-green-500">
+          <CardContent className="p-5">
+            <h3 className="mb-3 font-bold text-lg">Новый заказ</h3>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <label className="text-xs text-muted-foreground">Имя *</label>
+                <Input value={createForm.name} onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Телефон *</label>
+                <Input value={createForm.phone} onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Email</label>
+                <Input value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Рейс</label>
+                <Input value={createForm.flightNumber} onChange={(e) => setCreateForm({ ...createForm, flightNumber: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Направление</label>
+                <Input value={createForm.customDestination} onChange={(e) => setCreateForm({ ...createForm, customDestination: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Дата подачи *</label>
+                <Input type="date" value={createForm.pickupDate} onChange={(e) => setCreateForm({ ...createForm, pickupDate: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Время</label>
+                <Input type="time" value={createForm.pickupTime} onChange={(e) => setCreateForm({ ...createForm, pickupTime: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Пассажиров</label>
+                <Input type="number" min="1" value={createForm.passengers} onChange={(e) => setCreateForm({ ...createForm, passengers: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Багаж</label>
+                <Input type="number" min="0" value={createForm.luggage} onChange={(e) => setCreateForm({ ...createForm, luggage: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Статус</label>
+                <select value={createForm.status} onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm">
+                  {statuses.map((s) => (<option key={s} value={s}>{statusLabels[s]}</option>))}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Канал</label>
+                <select value={createForm.channel} onChange={(e) => setCreateForm({ ...createForm, channel: e.target.value })} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm">
+                  <option value="manual">Вручную</option>
+                  <option value="website">Сайт</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="telegram">Telegram</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">ID класса авто</label>
+                <Input type="number" value={createForm.vehicleClassId} onChange={(e) => setCreateForm({ ...createForm, vehicleClassId: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">ID водителя</label>
+                <Input type="number" value={createForm.driverId} onChange={(e) => setCreateForm({ ...createForm, driverId: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Цена (сом)</label>
+                <Input value={createForm.totalPriceSom} onChange={(e) => setCreateForm({ ...createForm, totalPriceSom: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Цена (USD)</label>
+                <Input value={createForm.totalPriceUsd} onChange={(e) => setCreateForm({ ...createForm, totalPriceUsd: e.target.value })} />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Язык</label>
+                <Input value={createForm.language} onChange={(e) => setCreateForm({ ...createForm, language: e.target.value })} placeholder="ru, en, de..." />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Страна клиента</label>
+                <Input value={createForm.clientCountry} onChange={(e) => setCreateForm({ ...createForm, clientCountry: e.target.value })} placeholder="KG, DE, US..." />
+              </div>
+              <div className="flex items-end gap-4">
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={createForm.needsSign} onChange={(e) => setCreateForm({ ...createForm, needsSign: e.target.checked })} />
+                  Табличка
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={createForm.isUrgent} onChange={(e) => setCreateForm({ ...createForm, isUrgent: e.target.checked })} />
+                  <span className="text-red-600 font-medium">Срочный</span>
+                </label>
+              </div>
+              {createForm.needsSign && (
+                <div>
+                  <label className="text-xs text-muted-foreground">Текст таблички</label>
+                  <Input value={createForm.signText} onChange={(e) => setCreateForm({ ...createForm, signText: e.target.value })} />
+                </div>
+              )}
+              <div className="sm:col-span-2 lg:col-span-3">
+                <label className="text-xs text-muted-foreground">Примечания</label>
+                <Input value={createForm.notes} onChange={(e) => setCreateForm({ ...createForm, notes: e.target.value })} />
+              </div>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <Button onClick={handleCreate} disabled={saving || !createForm.name || !createForm.phone || !createForm.pickupDate} className="bg-green-600 hover:bg-green-700">
+                <Save className="mr-2 h-4 w-4" />
+                {saving ? "Сохранение..." : "Создать"}
+              </Button>
+              <Button variant="outline" onClick={() => { setShowCreateForm(false); setCreateForm(emptyCreateForm); }}>
+                <X className="mr-2 h-4 w-4" />
+                Отмена
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {detail && (
         <Card className="mb-4 border-taxi-blue">
           <CardContent className="p-5">
@@ -144,6 +342,15 @@ export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
               <div><span className="text-muted-foreground">Багаж:</span> {detail.luggage} шт.</div>
               <div><span className="text-muted-foreground">Направление:</span> {detail.customDestination || `Маршрут #${detail.routeId}`}</div>
               <div><span className="text-muted-foreground">Источник:</span> {detail.source}</div>
+              <div><span className="text-muted-foreground">Канал:</span> {detail.channel ? channelLabels[detail.channel]?.label || detail.channel : "—"}</div>
+              <div><span className="text-muted-foreground">Класс авто:</span> {detail.vehicleClassId || "—"}</div>
+              <div><span className="text-muted-foreground">Водитель ID:</span> {detail.driverId || "—"}</div>
+              <div><span className="text-muted-foreground">Цена (сом):</span> {detail.totalPriceSom || "—"}</div>
+              <div><span className="text-muted-foreground">Цена (USD):</span> {detail.totalPriceUsd || "—"}</div>
+              <div><span className="text-muted-foreground">Язык:</span> {detail.language || "—"}</div>
+              <div><span className="text-muted-foreground">Страна:</span> {detail.clientCountry || "—"}</div>
+              <div><span className="text-muted-foreground">Табличка:</span> {detail.needsSign ? (detail.signText || "Да") : "Нет"}</div>
+              <div><span className="text-muted-foreground">Срочный:</span> {detail.isUrgent ? <Badge className="bg-red-100 text-red-700">Да</Badge> : "Нет"}</div>
               <div><span className="text-muted-foreground">Создано:</span> {new Date(detail.createdAt).toLocaleString("ru")}</div>
               {detail.notes && (
                 <div className="sm:col-span-2"><span className="text-muted-foreground">Примечания:</span> {detail.notes}</div>
@@ -226,6 +433,10 @@ export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
                   <th className="px-4 py-3 font-medium">Дата</th>
                   <th className="px-4 py-3 font-medium">Пасс.</th>
                   <th className="px-4 py-3 font-medium">Статус</th>
+                  <th className="px-4 py-3 font-medium">Канал</th>
+                  <th className="px-4 py-3 font-medium">Класс</th>
+                  <th className="px-4 py-3 font-medium">Язык</th>
+                  <th className="px-4 py-3 font-medium">Срочный</th>
                   <th className="px-4 py-3 font-medium">Действия</th>
                 </tr>
               </thead>
@@ -250,6 +461,18 @@ export function BookingsAdmin({ bookings }: { bookings: Booking[] }) {
                       <Badge className={statusColors[b.status]}>
                         {statusLabels[b.status]}
                       </Badge>
+                    </td>
+                    <td className="px-4 py-3">
+                      {b.channel ? (
+                        <Badge className={channelLabels[b.channel]?.color || ""}>
+                          {channelLabels[b.channel]?.label || b.channel}
+                        </Badge>
+                      ) : "—"}
+                    </td>
+                    <td className="px-4 py-3">{b.vehicleClassId || "—"}</td>
+                    <td className="px-4 py-3">{b.language || "—"}</td>
+                    <td className="px-4 py-3">
+                      {b.isUrgent ? <Badge className="bg-red-100 text-red-700">Срочно</Badge> : "—"}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">

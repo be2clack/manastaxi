@@ -5,11 +5,13 @@ import { redirect } from "next/navigation";
 import { getBookingStats, getBookings } from "@/lib/admin-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarCheck, Clock, CheckCircle2, XCircle } from "lucide-react";
+import { CalendarCheck, Clock, CheckCircle2, XCircle, Activity, Users, Car, Star } from "lucide-react";
 
 const statusLabels: Record<string, string> = {
   new: "Новый",
   confirmed: "Подтверждён",
+  driver_search: "Поиск водителя",
+  assigned: "Назначен",
   in_progress: "В работе",
   completed: "Завершён",
   cancelled: "Отменён",
@@ -18,6 +20,8 @@ const statusLabels: Record<string, string> = {
 const statusColors: Record<string, string> = {
   new: "bg-blue-100 text-blue-700",
   confirmed: "bg-green-100 text-green-700",
+  driver_search: "bg-orange-100 text-orange-700",
+  assigned: "bg-purple-100 text-purple-700",
   in_progress: "bg-yellow-100 text-yellow-700",
   completed: "bg-gray-100 text-gray-700",
   cancelled: "bg-red-100 text-red-700",
@@ -85,6 +89,53 @@ export default async function AdminDashboard({
             <div>
               <p className="text-sm text-muted-foreground">Завершённые</p>
               <p className="text-2xl font-bold">{stats.completed}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
+              <Activity className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Активные заказы</p>
+              <p className="text-2xl font-bold">{stats.activeOrders}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+              <Users className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Водители онлайн</p>
+              <p className="text-2xl font-bold">{stats.onlineDrivers}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+              <Car className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Всего водителей</p>
+              <p className="text-2xl font-bold">{stats.totalDrivers}</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-4 p-5">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+              <Star className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Средний рейтинг</p>
+              <p className="text-2xl font-bold">{stats.avgRating || "—"}</p>
             </div>
           </CardContent>
         </Card>
