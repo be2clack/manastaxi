@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/dispatch-orders", "schedule": "* * * * *" },
+    { "path": "/api/cron/send-reminders", "schedule": "* * * * *" },
+    { "path": "/api/cron/collect-feedback", "schedule": "* * * * *" },
+    { "path": "/api/cron/check-stale", "schedule": "*/15 * * * *" }
+  ]
+}
