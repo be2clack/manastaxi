@@ -5,14 +5,20 @@ import {
   bookings,
   drivers,
   routes,
+  routePrices,
   tours,
   services,
   settings,
   contactMessages,
   vehicleClasses,
   aiSettings,
+  telegramBotSettings,
+  conversations,
+  messages,
+  feedback,
+  orderEvents,
 } from "@/db/schema";
-import { eq, desc, asc, sql } from "drizzle-orm";
+import { eq, desc, asc, sql, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 // ============ VEHICLE CLASSES ============
@@ -326,4 +332,104 @@ export async function updateDriver(
 export async function deleteDriver(id: number) {
   await db.delete(drivers).where(eq(drivers.id, id));
   revalidatePath("/admin/drivers");
+}
+
+// ============ ROUTE PRICES ============
+export async function getRoutePrices() {
+  return db.select().from(routePrices);
+}
+
+export async function upsertRoutePrice(data: {
+  routeId: number;
+  vehicleClassId: number;
+  priceSom: string;
+  priceUsd: string;
+}) {
+  const existing = await db
+    .select()
+    .from(routePrices)
+    .where(
+      and(
+        eq(routePrices.routeId, data.routeId),
+        eq(routePrices.vehicleClassId, data.vehicleClassId)
+      )
+    )
+    .limit(1);
+
+  if (existing.length > 0) {
+    await db
+      .update(routePrices)
+      .set({ priceSom: data.priceSom, priceUsd: data.priceUsd })
+      .where(eq(routePrices.id, existing[0].id));
+  } else {
+    await db.insert(routePrices).values(data);
+  }
+  revalidatePath("/admin/route-prices");
+}
+
+export async function bulkUpsertRoutePrices(
+  prices: Array<{
+    routeId: number;
+    vehicleClassId: number;
+    priceSom: string;
+    priceUsd: string;
+  }>
+) {
+  for (const price of prices) {
+    await upsertRoutePrice(price);
+  }
+  revalidatePath("/admin/route-prices");
+}
+
+// ============ TELEGRAM BOT SETTINGS ============
+export async function getTelegramSettings() {
+  return db.select().from(telegramBotSettings);
+}
+
+export async function upsertTelegramSetting(data: {
+  botType: "client" | "driver" | "admin";
+  token: string;
+  webhookUrl?: string;
+  isActive: boolean;
+}) {
+  const existing = await db
+    .select()
+    .from(telegramBotSettings)
+    .where(eq(telegramBotSettings.botType, data.botType))
+    .limit(1);
+
+  if (existing.length > 0) {
+    await db
+      .update(telegramBotSettings)
+      .set({
+        token: data.token,
+        webhookUrl: data.webhookUrl,
+        isActive: data.isActive,
+      })
+      .where(eq(telegramBotSettings.id, existing[0].id));
+  } else {
+    await db.insert(telegramBotSettings).values(data);
+  }
+  revalidatePath("/admin/telegram");
+}
+
+// ============ CONVERSATIONS ============
+export async function getConversations() {
+  return db.select().from(conversations).orderBy(desc(conversations.updatedAt));
+}
+
+export async function getConversationMessages(conversationId: number) {
+  return db.select().from(messages)
+    .where(eq(messages.conversationId, conversationId))
+    .orderBy(asc(messages.createdAt));
+}
+
+// ============ FEEDBACK ============
+export async function getFeedback() {
+  return db.select().from(feedback).orderBy(desc(feedback.createdAt));
+}
+
+// ============ ORDER EVENTS ============
+export async function getOrderEvents() {
+  return db.select().from(orderEvents).orderBy(desc(orderEvents.createdAt)).limit(200);
 }

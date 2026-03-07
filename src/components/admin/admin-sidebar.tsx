@@ -5,13 +5,21 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   CalendarCheck,
+  Users,
   Route,
+  Car,
+  DollarSign,
   Mountain,
   Wrench,
-  Settings,
+  MessageCircle,
+  Star,
+  Activity,
   MessageSquare,
+  Bot,
+  Send,
+  Phone,
+  Settings,
   LogOut,
-  Car,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +27,19 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { href: "/admin", label: "Панель управления", icon: LayoutDashboard },
   { href: "/admin/bookings", label: "Бронирования", icon: CalendarCheck },
+  { href: "/admin/drivers", label: "Водители", icon: Users },
   { href: "/admin/routes", label: "Маршруты", icon: Route },
-  { href: "/admin/tours", label: "Туры", icon: Mountain },
   { href: "/admin/vehicle-classes", label: "Классы машин", icon: Car },
+  { href: "/admin/route-prices", label: "Цены маршрутов", icon: DollarSign },
+  { href: "/admin/tours", label: "Туры", icon: Mountain },
   { href: "/admin/services", label: "Услуги", icon: Wrench },
+  { href: "/admin/conversations", label: "Переписки", icon: MessageCircle },
+  { href: "/admin/feedback", label: "Отзывы", icon: Star },
+  { href: "/admin/events", label: "События", icon: Activity },
   { href: "/admin/messages", label: "Сообщения", icon: MessageSquare },
+  { href: "/admin/ai-settings", label: "Настройки ИИ", icon: Bot },
+  { href: "/admin/telegram", label: "Telegram боты", icon: Send },
+  { href: "/admin/whatsapp", label: "WhatsApp", icon: Phone },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];
 
