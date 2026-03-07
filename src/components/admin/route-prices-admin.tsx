@@ -5,7 +5,9 @@ import { bulkUpsertRoutePrices } from "@/lib/admin-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Save, Search } from "lucide-react";
+import { Save, Search, RefreshCw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { updateSetting } from "@/lib/admin-actions";
 
 type Route = {
   id: number;
@@ -60,11 +62,16 @@ export function RoutePricesAdmin({
   routes,
   vehicleClasses,
   routePrices,
+  currencyRate: initialRate,
 }: {
   routes: Route[];
   vehicleClasses: VehicleClass[];
   routePrices: RoutePrice[];
+  currencyRate: number;
 }) {
+  const [rate, setRate] = useState(initialRate);
+  const [editingRate, setEditingRate] = useState(false);
+  const [rateInput, setRateInput] = useState(String(initialRate));
   // Build initial price map from existing data
   const initialPrices = useMemo(() => {
     const map: Record<string, { priceSom: string; priceUsd: string }> = {};
@@ -104,15 +111,27 @@ export function RoutePricesAdmin({
     value: string
   ) {
     const key = priceKey(routeId, vehicleClassId);
-    setPrices((prev) => ({
-      ...prev,
-      [key]: {
-        priceSom: prev[key]?.priceSom || "",
-        priceUsd: prev[key]?.priceUsd || "",
-        [field]: value,
-      },
-    }));
+    setPrices((prev) => {
+      const existing = prev[key] || { priceSom: "", priceUsd: "" };
+      const updated = { ...existing, [field]: value };
+
+      // Auto-calculate SOM when USD is entered
+      if (field === "priceUsd" && value && rate > 0) {
+        updated.priceSom = String(Math.round(Number(value) * rate));
+      }
+
+      return { ...prev, [key]: updated };
+    });
     setChanged((prev) => new Set(prev).add(key));
+  }
+
+  async function handleRateSave() {
+    const newRate = Number(rateInput);
+    if (newRate > 0) {
+      setRate(newRate);
+      await updateSetting("currency_rate", String(newRate));
+      setEditingRate(false);
+    }
   }
 
   async function handleSave() {
@@ -147,20 +166,50 @@ export function RoutePricesAdmin({
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Цены маршрутов</h1>
-        <Button
-          onClick={handleSave}
-          disabled={saving || changed.size === 0}
-          className="bg-taxi-blue hover:bg-taxi-blue-dark"
-        >
-          <Save className="mr-2 h-4 w-4" />
-          {saving
-            ? "Сохранение..."
-            : saved
-              ? "Сохранено!"
-              : `Сохранить всё${changed.size > 0 ? ` (${changed.size})` : ""}`}
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-lg border bg-muted/50 px-3 py-1.5">
+            <span className="text-sm text-muted-foreground">Курс:</span>
+            {editingRate ? (
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-medium">1 USD =</span>
+                <Input
+                  type="number"
+                  className="h-7 w-20 text-center text-sm"
+                  value={rateInput}
+                  onChange={(e) => setRateInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleRateSave()}
+                  autoFocus
+                />
+                <span className="text-sm font-medium">KGS</span>
+                <Button size="sm" variant="ghost" className="h-7 px-2" onClick={handleRateSave}>
+                  <Save className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setRateInput(String(rate)); setEditingRate(true); }}
+                className="flex items-center gap-1.5 text-sm font-semibold hover:text-taxi-blue transition-colors"
+              >
+                1 USD = {rate} KGS
+                <RefreshCw className="h-3 w-3 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+          <Button
+            onClick={handleSave}
+            disabled={saving || changed.size === 0}
+            className="bg-taxi-blue hover:bg-taxi-blue-dark"
+          >
+            <Save className="mr-2 h-4 w-4" />
+            {saving
+              ? "Сохранение..."
+              : saved
+                ? "Сохранено!"
+                : `Сохранить всё${changed.size > 0 ? ` (${changed.size})` : ""}`}
+          </Button>
+        </div>
       </div>
 
       <Card>
