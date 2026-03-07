@@ -1,8 +1,9 @@
 "use server";
 
 import { db } from "@/db";
-import { bookings, contactMessages, routes } from "@/db/schema";
+import { bookings, contactMessages, routes, orderEvents } from "@/db/schema";
 import { eq, ilike, and, asc } from "drizzle-orm";
+import { notifyNewOrder } from "@/lib/notifications";
 
 export async function getRoutes(search?: string) {
   if (search) {
@@ -56,7 +57,17 @@ export async function createBooking(formData: FormData) {
   }
 
   try {
-    await db.insert(bookings).values(data);
+    const [newBooking] = await db.insert(bookings).values(data).returning();
+
+    // Create order event
+    await db.insert(orderEvents).values({
+      bookingId: newBooking.id,
+      event: "created",
+    });
+
+    // Notify admins
+    await notifyNewOrder(newBooking);
+
     return { success: true };
   } catch {
     return { success: false, error: "Failed to create booking" };

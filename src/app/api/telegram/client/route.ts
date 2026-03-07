@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { conversations, messages } from "@/db/schema";
+import {
+  conversations,
+  messages,
+  feedback,
+  drivers,
+  bookings,
+  orderEvents,
+} from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { processClientMessage } from "@/lib/ai/chat-service";
 import {
@@ -81,7 +88,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    // Handle callback queries (for feedback buttons later)
+    // Handle callback queries (for feedback buttons)
     if (update.callback_query) {
       const callbackData = update.callback_query.data;
       const chatId = String(update.callback_query.message.chat.id);
@@ -106,11 +113,107 @@ export async function POST(request: Request) {
 }
 
 async function handleFeedbackCallback(
-  _chatId: string,
-  _data: string,
+  chatId: string,
+  data: string,
   callbackQueryId: string,
 ) {
-  // Will be fully implemented in the feedback cron task
-  // For now, acknowledge the callback
-  await answerCallbackQuery("client", callbackQueryId, "Spasibo!");
+  await answerCallbackQuery("client", callbackQueryId);
+
+  // feedback_driver_N_bookingId
+  if (data.startsWith("feedback_driver_")) {
+    const parts = data.replace("feedback_driver_", "").split("_");
+    const rating = parseInt(parts[0]);
+    const bookingId = parseInt(parts[1]);
+
+    // Store driver rating temporarily in orderEvents metadata
+    await db.insert(orderEvents).values({
+      bookingId,
+      event: "feedback_received",
+      details: { driverRating: rating, step: "driver_rated" },
+    });
+
+    // Ask for vehicle rating
+    const vehicleButtons = [1, 2, 3, 4, 5].map((n) => ({
+      text: "⭐".repeat(n),
+      callback_data: `feedback_vehicle_${n}_${bookingId}`,
+    }));
+
+    await sendTelegramMessage(
+      "client",
+      chatId,
+      "Спасибо! Теперь оцените состояние машины:",
+      {
+        inline_keyboard: [vehicleButtons],
+      },
+    );
+    return;
+  }
+
+  // feedback_vehicle_N_bookingId
+  if (data.startsWith("feedback_vehicle_")) {
+    const parts = data.replace("feedback_vehicle_", "").split("_");
+    const vehicleRating = parseInt(parts[0]);
+    const bookingId = parseInt(parts[1]);
+
+    // Get the driver rating from events
+    const events = await db
+      .select()
+      .from(orderEvents)
+      .where(
+        and(
+          eq(orderEvents.bookingId, bookingId),
+          eq(orderEvents.event, "feedback_received"),
+        ),
+      );
+
+    const driverRating =
+      (events[0]?.details as Record<string, unknown>)?.driverRating as number ||
+      5;
+
+    // Get booking to find driver
+    const [booking] = await db
+      .select()
+      .from(bookings)
+      .where(eq(bookings.id, bookingId));
+    if (!booking?.driverId) return;
+
+    // Save feedback
+    await db.insert(feedback).values({
+      bookingId,
+      driverId: booking.driverId,
+      ratingDriver: driverRating,
+      ratingVehicle: vehicleRating,
+      language: booking.language || "ru",
+    });
+
+    // Recalculate driver average rating
+    const allFeedback = await db
+      .select()
+      .from(feedback)
+      .where(eq(feedback.driverId, booking.driverId));
+    const avgRating =
+      allFeedback.reduce((sum, f) => sum + f.ratingDriver, 0) /
+      allFeedback.length;
+    await db
+      .update(drivers)
+      .set({ rating: String(avgRating.toFixed(2)) })
+      .where(eq(drivers.id, booking.driverId));
+
+    // Thank the client
+    await sendTelegramMessage(
+      "client",
+      chatId,
+      "Спасибо за вашу оценку! 🙏\nБудем рады видеть вас снова. Manas Taxi 🚕",
+    );
+    return;
+  }
+
+  // feedback_skip_bookingId
+  if (data.startsWith("feedback_skip_")) {
+    await sendTelegramMessage(
+      "client",
+      chatId,
+      "Спасибо! До свидания! 🙏",
+    );
+  }
 }

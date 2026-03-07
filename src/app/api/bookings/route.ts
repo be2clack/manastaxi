@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
-import { bookings } from "@/db/schema";
+import { bookings, orderEvents } from "@/db/schema";
+import { notifyNewOrder } from "@/lib/notifications";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await db
+    const [newBooking] = await db
       .insert(bookings)
       .values({
         name: data.name,
@@ -31,9 +32,18 @@ export async function POST(request: NextRequest) {
       })
       .returning();
 
+    // Create order event
+    await db.insert(orderEvents).values({
+      bookingId: newBooking.id,
+      event: "created",
+    });
+
+    // Notify admins
+    await notifyNewOrder(newBooking);
+
     return NextResponse.json({
       success: true,
-      booking: result[0],
+      booking: newBooking,
     });
   } catch (error) {
     console.error("Booking API error:", error);
